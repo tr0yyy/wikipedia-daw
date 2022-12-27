@@ -129,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "WikipediaDAW"
+  "defaultProject": "WikipediaDAW",
+  "cli": {
+    "analytics": false
+  }
 }
