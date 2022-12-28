@@ -12,7 +12,7 @@ namespace WikipediaDAW.ContextModels
         public DbSet<Istoric_admin> istorici_admin { get; set; }
 
 
-        public UtilizatorContext(DbContextOptions options) : base(options)
+        public UtilizatorContext(DbContextOptions<UtilizatorContext> options) : base(options)
         {
         }
 
