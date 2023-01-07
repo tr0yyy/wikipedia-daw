@@ -12,7 +12,7 @@ using WikipediaDAW.ContextModels;
 namespace WikipediaDAW.Migrations
 {
     [DbContext(typeof(UtilizatorContext))]
-    [Migration("20230105112702_Initial")]
+    [Migration("20230107104313_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

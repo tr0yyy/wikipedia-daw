@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityServer4.Events;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using WikipediaDAW.ContextModels;
 using WikipediaDAW.Models;
 using WikipediaDAW.RequestModels;
+using WikipediaDAW.Services;
 
 namespace WikipediaDAW.Controllers
 {
@@ -12,37 +16,28 @@ namespace WikipediaDAW.Controllers
     public class AccountsController : ControllerBase
     {
 
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<User> _roleManager;
+        private readonly IAuthService _authService;
 
-        public AccountsController(UserManager<User> userManager)
+        public AccountsController(IAuthService authService)
         {
-            _userManager = userManager;
+            _authService = authService;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
 
         {
+            var response = await _authService.Register(model);
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            return Ok(response);
+        }
 
-            Console.WriteLine(model.UserName);
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
+        {
+            var response = await _authService.Login(model);
 
-            var user = new User { UserName = model.UserName, Email = model.Email };
-
-            Console.WriteLine(user.ToString());
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded) return BadRequest(result.Errors);
-
-            await _userManager.AddToRoleAsync(user, Roles.User);
-
-            return Ok(new RegisterResponse(user, Roles.User));
+            return Ok(response);
         }
     }
 }
