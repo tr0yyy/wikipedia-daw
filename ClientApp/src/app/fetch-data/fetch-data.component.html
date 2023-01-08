@@ -2,9 +2,9 @@
 
 <p>Lista completa de articole</p>
 
-<p *ngIf="!forecasts"><em>Loading...</em></p>
+<p *ngIf="!listaArticole"><em>Loading...</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="forecasts">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="listaArticole">
   <thead>
     <tr>
       <th></th>
@@ -14,10 +14,10 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let forecast of forecasts">
-      <td>{{ forecast.titlu }}</td>
-      <td>{{ forecast.autor_creare }}</td>
-      <td>{{ forecast.link }}</td>
+    <tr *ngFor="let articol of listaArticole">
+      <td>{{ articol.titlu }}</td>
+      <td>{{ articol.autor_creare }}</td>
+      <td>{{ articol.link }}</td>
     </tr>
   </tbody>
 </table>

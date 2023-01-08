@@ -6,11 +6,11 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './fetch-data.component.html'
 })
 export class FetchDataComponent {
-  public forecasts: ListaArticole[] = [];
+  public listaArticole: ListaArticole[] = [];
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     http.get<ListaArticole[]>(baseUrl + 'listaArticole').subscribe(result => {
-      this.forecasts = result;
+      this.listaArticole = result;
     }, error => console.error(error));
   }
 }
