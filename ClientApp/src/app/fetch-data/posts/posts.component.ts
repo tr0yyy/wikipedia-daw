@@ -154,7 +154,7 @@ function hello() {
   onFormChanges(): void {
     this.templateForm.valueChanges.subscribe(formData => {
       if (formData) {
-        this.markdownText = formData.body;
+        this.markdownTextCopy = formData.body;
       }
     });
   }
@@ -180,7 +180,6 @@ function hello() {
 
   parse(inputValue: string) {
     const markedOutput = this.markdownService.parse(inputValue.trim());
-    this.highlight();
 
     return markedOutput;
   }

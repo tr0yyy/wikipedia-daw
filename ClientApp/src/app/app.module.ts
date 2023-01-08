@@ -62,7 +62,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler';
           smartypants: false,
         },
       },
-      sanitize: SecurityContext.NONE
     }),
     FormsModule,
     ReactiveFormsModule,
