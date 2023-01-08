@@ -1,10 +1,11 @@
-﻿using WikipediaDAW.RequestModels;
+﻿using FluentResults;
+using WikipediaDAW.RequestModels;
 
 namespace WikipediaDAW.Services
 {
     public interface IAuthService
     {
-        Task<string> Register(RegisterRequest register);
-        Task<string> Login(LoginRequest login);
+        Task<Result<string>> Register(RegisterRequest register);
+        Task<Result<string>> Login(LoginRequest login);
     }
 }
