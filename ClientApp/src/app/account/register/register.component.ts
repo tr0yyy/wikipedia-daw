@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-register',
@@ -7,13 +10,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() { }
+  protected registerForm!: FormGroup;
 
-  ngOnInit(): void {
+  constructor(private authenticationService: AuthenticationService) {}
+
+  ngOnInit() {
+    this.registerForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', Validators.required),
+    });
   }
 
-  onSubmit() {
-    this.spinner.show();
+  public onSubmit() {
+    this.authenticationService.register(
+      this.registerForm.get('email')!.value,
+      this.registerForm.get('username')!.value,
+      this.registerForm!.get('password')!.value
+    );
   }
-
 }

@@ -44,7 +44,7 @@ public class AuthService : IAuthService
 
         await _userManager.AddToRoleAsync(user, Roles.User);
 
-        return await Login(new LoginRequest { UserName = model.Email, Password = model.Password });
+        return await Login(new LoginRequest { UserName = model.UserName, Password = model.Password });
     }
 
     public async Task<string> Login(LoginRequest request)
