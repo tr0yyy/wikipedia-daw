@@ -1,13 +1,13 @@
 <!-- TODO: Text cu "Acest articol este protejat" sau nimic otherwise -->
 <!-- TODO: pagina de edit articol + buton -->
-<div *ngIf="userType === 0 or userType === 1">
+<div *ngIf="userType === 0 or userType === 1" style="padding-top:65px; padding-bottom:50px">
 
     <div *ngIf="!isEditing">
     <button mat-flat-button color="primary" style="float:right" (click)="editArticle($event)">
         <mat-icon>edit</mat-icon>
         <span> Editeaza articolul</span>
     </button>
-    <div class="result-preview outline">
+    <div style="word-wrap: break-word;">
         <markdown [data]="markdownText"></markdown>
     </div>
 </div>
