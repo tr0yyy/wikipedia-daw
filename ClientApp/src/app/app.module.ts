@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input'; 
 import { AccountModule } from './account/account.module';
+import { LoadingInterceptor } from './helpers/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { AccountModule } from './account/account.module';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: HomeComponent, pathMatch: 'full', },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]}
@@ -52,7 +53,8 @@ import { AccountModule } from './account/account.module';
     MatInputModule,
   ],
   providers: [DatePipe,
-  { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+  { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+  { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
 ],
   bootstrap: [AppComponent]
 })

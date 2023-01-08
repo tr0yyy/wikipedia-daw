@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Events;
+﻿using FluentResults;
+using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,11 @@ namespace WikipediaDAW.Controllers
         {
             var response = await _authService.Register(model);
 
-            return Ok(response);
+            if(!response.IsSuccess)
+            {
+                return BadRequest(exportResponse(response));
+            }
+            return Ok(exportResponse(response));
         }
 
         [HttpPost("login")]
@@ -37,7 +42,16 @@ namespace WikipediaDAW.Controllers
         {
             var response = await _authService.Login(model);
 
-            return Ok(response);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(exportResponse(response));
+            }
+            return Ok(exportResponse(response));
+        }
+
+        private LoginResponse<string> exportResponse(Result<string> response)
+        {
+            return new LoginResponse<string>(response.IsSuccess, response.Errors?.Select(error => error.Message), response.Value);
         }
     }
 }

@@ -23,6 +23,8 @@ builder.Services.AddDbContext<UtilizatorContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("db")));
 
 builder.Services.AddIdentity<User, IdentityRole>()
+     .AddRoles<IdentityRole>()
+     .AddRoleManager<RoleManager<IdentityRole>>()
      .AddEntityFrameworkStores<UtilizatorContext>()
      .AddDefaultTokenProviders();
 

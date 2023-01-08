@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FluentResults;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -20,13 +21,13 @@ public class AuthService : IAuthService
         _configuration = configuration;
     }
 
-    public async Task<string> Register(RegisterRequest model)
+    public async Task<Result<string>> Register(RegisterRequest model)
     {
         var userByEmail = await _userManager.FindByEmailAsync(model.Email);
         var userByUsername = await _userManager.FindByNameAsync(model.UserName);
         if (userByEmail is not null || userByUsername is not null)
         {
-            throw new ArgumentException($"User with email {model.Email} or username {model.UserName} already exists.");
+            return Result.Fail($"User with email {model.Email} or username {model.UserName} already exists.");
         }
 
         User user = new()
@@ -39,7 +40,7 @@ public class AuthService : IAuthService
 
         if (!result.Succeeded)
         {
-            throw new ArgumentException($"Unable to register user {model.UserName} errors: {GetErrorsText(result.Errors)}");
+            return Result.Fail($"Unable to register user {model.UserName} errors: {GetErrorsText(result.Errors)}");
         }
 
         await _userManager.AddToRoleAsync(user, Roles.User);
@@ -47,25 +48,28 @@ public class AuthService : IAuthService
         return await Login(new LoginRequest { UserName = model.UserName, Password = model.Password });
     }
 
-    public async Task<string> Login(LoginRequest request)
+    public async Task<Result<string>> Login(LoginRequest request)
     {
         var user = await _userManager.FindByNameAsync(request.UserName);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
         {
-            throw new ArgumentException($"Unable to authenticate user {request.UserName}");
+            return Result.Fail($"Unable to authenticate user {request.UserName}. Check Password!");
         }
 
         var authClaims = new List<Claim>
         {
             new(ClaimTypes.Name, user.UserName),
-            new(ClaimTypes.Email, user.Email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
+
         var token = GetToken(authClaims);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
     }
 
     private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
