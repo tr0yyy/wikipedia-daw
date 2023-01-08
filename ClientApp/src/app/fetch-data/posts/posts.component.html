@@ -1,0 +1,42 @@
+<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+
+<!-- TODO: Text cu "Acest articol este protejat" sau nimic otherwise -->
+<!-- TODO: pagina de edit articol + buton -->
+
+
+
+<div *ngIf="userType === 0 or userType === 1">
+
+    <div *ngIf="!isEditing">
+    <button mat-flat-button color="primary" style="float:right" (click)="editArticle($event)">
+        <mat-icon>edit</mat-icon>
+        <span> Editeaza articolul</span>
+    </button>
+    <div class="result-preview outline">
+        <markdown [data]="markdownText"></markdown>
+    </div>
+</div>
+
+    <div *ngIf="isEditing">
+        
+        <button mat-flat-button color="primary" style="float:left" (click)="saveEdit($event)">
+            <mat-icon>save</mat-icon>
+            <span> Salveaza modificarile</span>
+        </button>
+
+        <button mat-flat-button color="warn" style="float:right" (click)="cancelEdit($event)">
+            <mat-icon>cancel</mat-icon>
+            <span> Anuleaza modificarile</span>
+        </button>
+
+        <form novalidate>
+            <div class="editor">
+                <label>Editor</label>
+                <angular-markdown-editor textareaId="editor1" [options]="editorOptions"
+            name="markdownText" [(ngModel)]="markdownText">
+        </angular-markdown-editor>
+            </div>
+        </form>
+
+    </div>
+</div>

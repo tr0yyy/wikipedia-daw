@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "ngx-markdown": "^15.0.0"
+  }
+}
