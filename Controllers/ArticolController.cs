@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WikipediaDAW.ContextModels;
@@ -7,7 +8,8 @@ using WikipediaDAW.Models;
 namespace WikipediaDAW.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Authorize(Roles = Roles.Admin)]
+    [Route("api/[controller]")]
     public class ArticolController : ControllerBase
     {
         UtilizatorContext _utilizatorContext { get; set; }
@@ -19,9 +21,10 @@ namespace WikipediaDAW.Controllers
             _utilizatorContext = utilizatorContext;
         }
 
-        [HttpGet]
+        [HttpGet("first50")]
         public IQueryable<Articol> Get()
         {
+            Console.WriteLine("test");
             DbSet<Articol> articols = _utilizatorContext.articole;
             return articols;
         }

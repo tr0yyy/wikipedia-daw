@@ -2,7 +2,7 @@
 <p>Pe prima pagină vei găsi ultimele 50 de articole apărute.</p>
 <p>Pentru a caută un articol, scrie mai jos denumirea acestuia.</p>
 <p><input type="text" (keyup)="filterValues($event)"></p>
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="articole">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="articole && accessToTable">
   <thead>
     <tr>
       <th>Nume Articol</th>

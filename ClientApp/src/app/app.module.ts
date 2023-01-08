@@ -25,6 +25,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AccountModule } from './account/account.module';
 import { PostsComponent } from './fetch-data/posts/posts.component';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler';
+import { LoadingInterceptor } from './helpers/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: HomeComponent, pathMatch: 'full', },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]},
@@ -76,7 +77,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler';
     })
   ],
   providers: [DatePipe,
-  { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+  { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+  { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
 ],
   bootstrap: [AppComponent]
 })
