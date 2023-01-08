@@ -19,6 +19,7 @@ export class PostsComponent implements OnInit {
   markdownTextCopy = '';
   userType = 0;
   isEditing = false;
+  rowsNo = 12;
 
   constructor(
     private fb: FormBuilder,
@@ -47,32 +48,115 @@ function hello() {
 \`\`\`html
 <textarea [(ngModel)]="markdown"></textarea>
 <markdown [data]="markdown"></markdown>
-\`\`\``;
+\`\`\`
+
+### Markdown example
+---
+This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
+#### example.component.ts
+\`\`\`javascript
+function hello() {
+  alert('Hello World');
+}
+\`\`\`
+#### example.component.html
+\`\`\`html
+<textarea [(ngModel)]="markdown"></textarea>
+<markdown [data]="markdown"></markdown>
+\`\`\`
+
+### Markdown example
+---
+This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
+#### example.component.ts
+\`\`\`javascript
+function hello() {
+  alert('Hello World');
+}
+\`\`\`
+#### example.component.html
+\`\`\`html
+<textarea [(ngModel)]="markdown"></textarea>
+<markdown [data]="markdown"></markdown>
+\`\`\`
+
+### Markdown example
+---
+This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
+#### example.component.ts
+\`\`\`javascript
+function hello() {
+  alert('Hello World');
+}
+\`\`\`
+#### example.component.html
+\`\`\`html
+<textarea [(ngModel)]="markdown"></textarea>
+<markdown [data]="markdown"></markdown>
+\`\`\`
+
+### Markdown example
+---
+This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
+#### example.component.ts
+\`\`\`javascript
+function hello() {
+  alert('Hello World');
+}
+\`\`\`
+#### example.component.html
+\`\`\`html
+<textarea [(ngModel)]="markdown"></textarea>
+<markdown [data]="markdown"></markdown>
+\`\`\`
+
+### Markdown example
+---
+This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
+#### example.component.ts
+\`\`\`javascript
+function hello() {
+  alert('Hello World');
+}
+\`\`\`
+#### example.component.html
+\`\`\`html
+<textarea [(ngModel)]="markdown"></textarea>
+<markdown [data]="markdown"></markdown>
+\`\`\`
+`;
 
     this.buildForm(this.markdownText);
+    this.onFormChanges();
   }
 
   buildForm(markdownText: string) {
     this.templateForm = this.fb.group({
       body: [markdownText],
-      isPreview: [true]
     });
   }
 
   editArticle(event: Event) {
-    this.markdownTextCopy = this.markdownText;
     this.isEditing = true;
-    this.markdownTextCopy = '**Alupigus**'
+    this.markdownTextCopy = this.markdownText;
   }
 
   saveEdit(event: Event) {
+    this.markdownText = this.markdownTextCopy; // aici trebuie luat textul din form
     this.isEditing = false;
-    this.markdownText = this.markdownTextCopy;
   }
 
   cancelEdit(event: Event) {
     this.markdownTextCopy = '';
     this.isEditing = false;
+  }
+
+  onFormChanges(): void {
+    this.templateForm.valueChanges.subscribe(formData => {
+      if (formData) {
+        this.markdownText = formData.body;
+      }
+    });
   }
 
   highlight() {

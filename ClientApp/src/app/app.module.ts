@@ -24,6 +24,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input'; 
 import { AccountModule } from './account/account.module';
 import { PostsComponent } from './fetch-data/posts/posts.component';
+import { NO_ERRORS_SCHEMA } from '@angular/compiler';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { PostsComponent } from './fetch-data/posts/posts.component';
           smartypants: false,
         },
       },
+      sanitize: SecurityContext.NONE
     }),
     FormsModule,
     ReactiveFormsModule,
@@ -70,7 +72,9 @@ import { PostsComponent } from './fetch-data/posts/posts.component';
     MatFormFieldModule,
     MatCardModule,
     MatInputModule,
-    AngularMarkdownEditorModule
+    AngularMarkdownEditorModule.forRoot({
+      iconlibrary: 'fa'
+    })
   ],
   providers: [DatePipe,
   { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
