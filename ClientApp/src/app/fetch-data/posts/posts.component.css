@@ -20,3 +20,7 @@ textarea.md-input {
   max-height: 700px;
   overflow: auto;
 }
+
+.clear {
+  clear: both;
+}
