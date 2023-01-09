@@ -10,5 +10,7 @@
         public string Continut { get; set; }
         public bool Protejat { get; set; }
 
+       
+
     }
 }

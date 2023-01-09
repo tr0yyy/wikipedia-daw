@@ -12,17 +12,21 @@
     </div>
 </div>
 
-    <div *ngIf="isEditing">
-        
-        <button mat-flat-button color="primary" style="float:left" (click)="saveEdit($event)">
-            <mat-icon>save</mat-icon>
-            <span> Salveaza modificarile</span>
-        </button>
+    <div *ngIf="isEditing" display="block">
+        <div class="buttonHolder">
+            <button mat-flat-button color="primary" style="float:left" (click)="saveEdit($event)">
+                <mat-icon>save</mat-icon>
+                <span> Salveaza modificarile</span>
+            </button>
 
-        <button mat-flat-button color="warn" style="float:right" (click)="cancelEdit($event)">
-            <mat-icon>cancel</mat-icon>
-            <span> Anuleaza modificarile</span>
-        </button>
+            <button mat-flat-button color="warn" style="float:right" (click)="cancelEdit($event)">
+                <mat-icon>cancel</mat-icon>
+                <span> Anuleaza modificarile</span>
+            </button>
+            
+        <div class="clear"></div>
+        </div>
+    
         <form [formGroup]="templateForm" novalidate>
             <div class="editor">
                 <angular-markdown-editor textareaId="editor1" [options]="editorOptions"
@@ -30,4 +34,4 @@
                 </angular-markdown-editor>
             </div>
         </form>
-            </div>
+    </div>
