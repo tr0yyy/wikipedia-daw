@@ -49,7 +49,7 @@ import { LoadingInterceptor } from './helpers/loading.interceptor';
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]},
-      { path: 'posts/post/:article', component: PostsComponent }, 
+      { path: 'articol/:title', component: PostsComponent }, 
     ]) ,
     MarkdownModule.forRoot({
       loader: HttpClient, // optional, only if you use [src] attribute

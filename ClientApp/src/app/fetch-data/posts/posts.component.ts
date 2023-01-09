@@ -1,7 +1,10 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { EditorOption, EditorInstance } from 'angular-markdown-editor'
 import { MarkdownService } from 'ngx-markdown'
+import { environment } from 'src/environments/environment';
 
 @Component({
   templateUrl: './posts.component.html',
@@ -21,10 +24,22 @@ export class PostsComponent implements OnInit {
   isEditing = false;
   rowsNo = 12;
 
+  articol!: ArticolInterface;
+
   constructor(
     private fb: FormBuilder,
-    private markdownService: MarkdownService
-  ) { }
+    private markdownService: MarkdownService,
+    private http: HttpClient,
+    private route: ActivatedRoute
+  ) 
+  { 
+    http.get<ArticolInterface>(environment.apiPath + '/articol/' + this.route.snapshot.paramMap.get('title')).subscribe(async result => {
+        
+      this.articol = await result;
+      console.log(this.articol);
+      this.markdownText = this.articol.continut
+    }, error => console.error(error));
+  }
 
   ngOnInit() {
     this.editorOptions = {
@@ -34,97 +49,7 @@ export class PostsComponent implements OnInit {
       onShow: (e) => this.bsEditorInstance = e,
       parser: (val) => this.parse(val)
     };
-    this.markdownText =
-      `### Markdown example
----
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
-#### example.component.ts
-\`\`\`javascript
-function hello() {
-  alert('Hello World');
-}
-\`\`\`
-#### example.component.html
-\`\`\`html
-<textarea [(ngModel)]="markdown"></textarea>
-<markdown [data]="markdown"></markdown>
-\`\`\`
-
-### Markdown example
----
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
-#### example.component.ts
-\`\`\`javascript
-function hello() {
-  alert('Hello World');
-}
-\`\`\`
-#### example.component.html
-\`\`\`html
-<textarea [(ngModel)]="markdown"></textarea>
-<markdown [data]="markdown"></markdown>
-\`\`\`
-
-### Markdown example
----
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
-#### example.component.ts
-\`\`\`javascript
-function hello() {
-  alert('Hello World');
-}
-\`\`\`
-#### example.component.html
-\`\`\`html
-<textarea [(ngModel)]="markdown"></textarea>
-<markdown [data]="markdown"></markdown>
-\`\`\`
-
-### Markdown example
----
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
-#### example.component.ts
-\`\`\`javascript
-function hello() {
-  alert('Hello World');
-}
-\`\`\`
-#### example.component.html
-\`\`\`html
-<textarea [(ngModel)]="markdown"></textarea>
-<markdown [data]="markdown"></markdown>
-\`\`\`
-
-### Markdown example
----
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
-#### example.component.ts
-\`\`\`javascript
-function hello() {
-  alert('Hello World');
-}
-\`\`\`
-#### example.component.html
-\`\`\`html
-<textarea [(ngModel)]="markdown"></textarea>
-<markdown [data]="markdown"></markdown>
-\`\`\`
-
-### Markdown example
----
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to the editor.
-#### example.component.ts
-\`\`\`javascript
-function hello() {
-  alert('Hello World');
-}
-\`\`\`
-#### example.component.html
-\`\`\`html
-<textarea [(ngModel)]="markdown"></textarea>
-<markdown [data]="markdown"></markdown>
-\`\`\`
-`;
+    
 
     this.buildForm(this.markdownText);
     this.onFormChanges();
@@ -144,6 +69,22 @@ function hello() {
   saveEdit(event: Event) {
     this.markdownText = this.markdownTextCopy; // aici trebuie luat textul din form
     this.isEditing = false;
+    this.articol.continut = this.markdownText;
+    console.log(this.articol);
+    this.http.post<ArticolInterface>(
+      environment.apiPath + '/articol/update-articol', {
+          Titlu: this.articol.titlu,
+          Continut: this.articol.continut,
+          Protejat : this.articol.protejat,
+      }
+  ).subscribe({
+    next: (result) => {
+      console.log(result);
+    },
+    error: (error: HttpErrorResponse) => {
+      console.log(error)
+    }
+});;
   }
 
   cancelEdit(event: Event) {
@@ -183,4 +124,15 @@ function hello() {
 
     return markedOutput;
   }
+}
+
+interface ArticolInterface {
+  Id: number;
+  domeniu: string;
+  titlu: string;
+  autor: string;
+  data_adaugarii: string;
+  continut: string;
+  protejat: boolean;
+  link: string;
 }
