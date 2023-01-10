@@ -51,6 +51,14 @@ namespace WikipediaDAW.Controllers
             return result;
         }
 
+        [HttpGet("alltitles/{title}")]
+        public IEnumerable<String> GetAllTitles(string title)
+        {
+
+            return _utilizatorContext.articole.Where(articol => articol.Titlu.ToLower().Contains(title.ToLower()))
+                .Select(x => new String(x.Titlu));
+        }
+
         [HttpPost("create")]
         public async Task<Result<string>> CreateArticol([FromBody] ArticolCreate model)
         {

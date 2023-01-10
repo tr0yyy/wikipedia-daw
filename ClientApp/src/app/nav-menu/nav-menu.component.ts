@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Route, Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -8,9 +11,18 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
+  // string[] articole
+  public articole: string[] = [];
+  // ---
+  public websiteCtrl : FormControl = new FormControl()
+  public websiteFilterCtrl : FormControl = new FormControl()
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) {}
 
+  constructor(private http: HttpClient, private authenticationService: AuthenticationService, private router: Router) {}
+
+  ngOnInit(){
+    
+  }
   isExpanded = false;
 
   collapse() {
@@ -27,5 +39,25 @@ export class NavMenuComponent {
     this.authenticationService.logout();
   }
 
+  /*SearchBar function*/
+  search(value: string) {
+    if (value !== "") {
+      this.http.get<string[]>(environment.apiPath + "/articol/alltitles/" + value).subscribe(async result => {
+        this.articole = await result;
+        console.log(this.articole);
+        
+        let input = document.getElementById('')
+
+      }, error => console.error(error))
+    } else {
+      this.articole = [];
+      console.log(this.articole);
+
+    }
+  }
+  generateLinkFromTitle(title: string) {
+    let link: string = window.location.pathname + "articol/" + title;
+    return link;
+  }
 
 }
