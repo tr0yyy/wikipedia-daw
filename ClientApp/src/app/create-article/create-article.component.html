@@ -1,0 +1,42 @@
+<!-- TODO: Text cu "Acest articol este protejat" sau nimic otherwise -->
+<!-- TODO: pagina de edit articol + buton -->
+<div display="block">
+    <form class="title-form" [formGroup]="titleDomain">
+        <mat-form-field class="title-full-width">
+          <mat-label>Titlu</mat-label>
+          <input matInput name="titlu" formControlName="titlu" placeholder="Titlul articolului">
+        </mat-form-field>
+        <mat-form-field class="title-full-width">
+            <mat-label>Domeniu</mat-label>
+            <input matInput name="domeniu" formControlName="domeniu" placeholder="Domeniul articolului">
+          </mat-form-field>
+      </form>
+    <form [formGroup]="templateForm" novalidate >
+        <div class="editor">
+            <angular-markdown-editor textareaId="editor1" [options]="editorOptions"
+                name="markdownTextCopy" [(ngModel)]="markdownTextCopy" formControlName="body" >
+            </angular-markdown-editor>
+        </div>
+    </form>
+    <div class="buttonHolder">
+        <button mat-flat-button color="primary" style="float:left" (click)="saveEdit($event)">
+            <mat-icon>save</mat-icon>
+            <span> Salveaza modificarile</span>
+        </button>
+
+        <button mat-flat-button color="warn" style="float:right" (click)="cancelEdit($event)">
+            <mat-icon>cancel</mat-icon>
+            <span> Anuleaza modificarile</span>
+        </button>
+        <div style="padding-left:210px">
+            <mat-icon color="primary">{{isLocked}}</mat-icon>
+            <mat-slide-toggle color="primary" (change)="checkIsProtected($event)" [(ngModel)]="isProtected">{{textProtected}}</mat-slide-toggle>
+        </div>
+
+    <div class="clear"></div>
+    </div>
+
+    <div>
+        
+</div>
+</div>

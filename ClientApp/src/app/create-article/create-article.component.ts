@@ -6,20 +6,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EditorOption, EditorInstance } from 'angular-markdown-editor'
 import { MarkdownService } from 'ngx-markdown'
 import { environment } from 'src/environments/environment';
-
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
-  templateUrl: './posts.component.html',
+  templateUrl: './create-article.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./posts.component.css']
+  styleUrls: ['./create-article.component.css']
 })
 
-export class PostsComponent implements OnInit {
+export class CreateArticleComponent implements OnInit {
   bsEditorInstance!: EditorInstance;
   markdownText = '';
   showEditor = true;
   templateForm!: FormGroup;
   editorOptions!: EditorOption;
+  titleDomain!: FormGroup
   
   markdownTextCopy = '';
   userType = 0;
@@ -29,24 +30,19 @@ export class PostsComponent implements OnInit {
   textProtected = "";
   isLocked = "";
 
-  articol!: ArticolInterface;
+
+
+  articol = {} as ArticolInterface;
 
   constructor(
     private fb: FormBuilder,
     private markdownService: MarkdownService,
+    private authService: AuthenticationService,
     private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) 
   { 
-    http.get<ArticolInterface>(environment.apiPath + '/articol/' + this.route.snapshot.paramMap.get('title')).subscribe(async result => {
-        
-      this.articol = await result;
-      console.log(this.articol);
-      this.markdownText = this.articol.continut
-      this.isProtected = this.articol.protejat
-      this.setTextIsProtected()
-    }, error => console.error(error));
+    this.setTextIsProtected()
   }
 
   ngOnInit() {
@@ -61,6 +57,10 @@ export class PostsComponent implements OnInit {
     
 
     this.buildForm(this.markdownText);
+    this.titleDomain = this.fb.group({
+      titlu: "",
+      domeniu: ""
+    })
     this.onFormChanges();
   }
 
@@ -80,36 +80,22 @@ export class PostsComponent implements OnInit {
     this.isEditing = false;
     this.articol.continut = this.markdownText;
     this.articol.protejat = this.isProtected;
+    this.articol.titlu = this.titleDomain.get('titlu')?.value;
+    this.articol.domeniu = this.titleDomain.get('domeniu')?.value
 
     console.log(this.articol);
     this.http.post<ArticolInterface>(
-      environment.apiPath + '/articol/update-articol', {
+      environment.apiPath + '/articol/create', {
+          Domeniu: this.articol.domeniu,
           Titlu: this.articol.titlu,
+          User: this.authService.getUser()?.name,
           Continut: this.articol.continut,
           Protejat : this.articol.protejat,
       }
   ).subscribe({
     next: (result) => {
       console.log(result);
-    },
-    error: (error: HttpErrorResponse) => {
-      console.log(error)
-    }
-});
-  }
-
-  revertEdit(event: Event) {
-    console.log(this.articol.titlu);
-    this.http.post<ArticolInterface>(
-      environment.apiPath + '/articol/revert-articol', {
-          Titlu: this.articol.titlu,
-          Continut: this.articol.continut,
-          Protejat : this.articol.protejat,
-      }
-  ).subscribe({
-    next: (result) => {
-      console.log(result);
-      window.location.reload()
+      this.router.navigate(['/articol/' + this.articol.titlu])
     },
     error: (error: HttpErrorResponse) => {
       console.log(error)
@@ -188,5 +174,4 @@ interface ArticolInterface {
   continut: string;
   protejat: boolean;
   link: string;
-  token?: string
 }

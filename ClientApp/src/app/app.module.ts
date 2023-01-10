@@ -26,6 +26,7 @@ import { AccountModule } from './account/account.module';
 import { PostsComponent } from './fetch-data/posts/posts.component';
 import { MatSlideToggleModule} from '@angular/material/slide-toggle'
 import { LoadingInterceptor } from './helpers/loading.interceptor';
+import { CreateArticleComponent } from './create-article/create-article.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { LoadingInterceptor } from './helpers/loading.interceptor';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    PostsComponent
+    PostsComponent,
+    CreateArticleComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
@@ -49,7 +51,8 @@ import { LoadingInterceptor } from './helpers/loading.interceptor';
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]},
-      { path: 'articol/:title', component: PostsComponent }, 
+      { path: 'articol/:title', component: PostsComponent },
+      { path: 'create-articol', component: CreateArticleComponent}
     ]) ,
     MarkdownModule.forRoot({
       loader: HttpClient, // optional, only if you use [src] attribute
