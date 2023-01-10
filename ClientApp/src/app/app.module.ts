@@ -24,7 +24,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input'; 
 import { AccountModule } from './account/account.module';
 import { PostsComponent } from './fetch-data/posts/posts.component';
-import { NO_ERRORS_SCHEMA } from '@angular/compiler';
+import { MatSlideToggleModule} from '@angular/material/slide-toggle'
 import { LoadingInterceptor } from './helpers/loading.interceptor';
 
 @NgModule({
@@ -70,6 +70,7 @@ import { LoadingInterceptor } from './helpers/loading.interceptor';
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
+    MatSlideToggleModule,
     MatCardModule,
     MatInputModule,
     AngularMarkdownEditorModule.forRoot({
