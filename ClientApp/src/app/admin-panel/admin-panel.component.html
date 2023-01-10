@@ -1,0 +1,20 @@
+<body>
+
+  <div class="input-group w-auto position-relative">
+    <input #input type="search"
+           class="form-control"
+           placeholder="Cauta utilizator dupa username"
+           aria-label="Search" />
+    <button class="btn btn-outline-primary" type="button" (click)="search(input.value)">
+      Search
+    </button>
+  </div>
+  <div class="position-absolute">
+    <ul class="list-unstyled" *ngFor="let user of utilizatoriFiltrati">
+      <li>
+        <a class="list-group-item" > {{user.username}} </a>
+      </li>
+    </ul>
+  </div>
+
+</body>

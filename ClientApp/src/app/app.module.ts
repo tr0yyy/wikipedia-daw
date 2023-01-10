@@ -26,6 +26,8 @@ import { AccountModule } from './account/account.module';
 import { PostsComponent } from './fetch-data/posts/posts.component';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { LoadingInterceptor } from './helpers/loading.interceptor';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { LoadingInterceptor } from './helpers/loading.interceptor';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    PostsComponent
+    PostsComponent,
+    AdminPanelComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
@@ -50,6 +53,7 @@ import { LoadingInterceptor } from './helpers/loading.interceptor';
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]},
       { path: 'articol/:title', component: PostsComponent }, 
+      { path: 'admin-panel', component: AdminPanelComponent},
     ]) ,
     MarkdownModule.forRoot({
       loader: HttpClient, // optional, only if you use [src] attribute
@@ -74,7 +78,7 @@ import { LoadingInterceptor } from './helpers/loading.interceptor';
     MatInputModule,
     AngularMarkdownEditorModule.forRoot({
       iconlibrary: 'fa'
-    })
+    }),
   ],
   providers: [DatePipe,
   { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},

@@ -12,6 +12,8 @@ namespace WikipediaDAW.ContextModels
         }
 
         public DbSet<Articol> articole { get; set; }
+
+        public DbSet<User> users { get; set; }
      
 
     }
