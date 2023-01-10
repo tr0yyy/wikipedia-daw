@@ -27,6 +27,7 @@ import { PostsComponent } from './fetch-data/posts/posts.component';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { LoadingInterceptor } from './helpers/loading.interceptor';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import {MatSelect, MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
     MatFormFieldModule,
     MatCardModule,
     MatInputModule,
+    MatSelectModule,
     AngularMarkdownEditorModule.forRoot({
       iconlibrary: 'fa'
     }),
