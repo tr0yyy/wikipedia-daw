@@ -86,6 +86,12 @@ public class AuthService : IAuthService
         return token;
     }
 
+    public static string getUserFromJwt(string JwtToken)
+    {
+        var token = new JwtSecurityTokenHandler().ReadJwtToken(JwtToken.Split(" ")[1]);
+        return token.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+    }
+
     private string GetErrorsText(IEnumerable<IdentityError> errors)
     {
         return string.Join(", ", errors.Select(error => error.Description).ToArray());

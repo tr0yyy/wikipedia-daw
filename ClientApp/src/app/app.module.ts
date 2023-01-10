@@ -24,8 +24,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input'; 
 import { AccountModule } from './account/account.module';
 import { PostsComponent } from './fetch-data/posts/posts.component';
-import { NO_ERRORS_SCHEMA } from '@angular/compiler';
+import { MatSlideToggleModule} from '@angular/material/slide-toggle'
 import { LoadingInterceptor } from './helpers/loading.interceptor';
+import { CreateArticleComponent } from './create-article/create-article.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import {MatSelect, MatSelectModule} from '@angular/material/select';
 
@@ -37,6 +38,8 @@ import {MatSelect, MatSelectModule} from '@angular/material/select';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
+    PostsComponent,
+    CreateArticleComponent
     PostsComponent,
     AdminPanelComponent
   ],
@@ -53,6 +56,8 @@ import {MatSelect, MatSelectModule} from '@angular/material/select';
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]},
+      { path: 'articol/:title', component: PostsComponent },
+      { path: 'create-articol', component: CreateArticleComponent}
       { path: 'articol/:title', component: PostsComponent }, 
       { path: 'admin-panel', component: AdminPanelComponent},
     ]) ,
@@ -75,6 +80,7 @@ import {MatSelect, MatSelectModule} from '@angular/material/select';
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
+    MatSlideToggleModule,
     MatCardModule,
     MatInputModule,
     MatSelectModule,

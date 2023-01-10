@@ -1,0 +1,36 @@
+.action-buttons {
+  padding-top: 10px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+textarea.md-input {
+  padding: 8px;
+}
+
+.outline {
+  border: 1px solid #c0c0c0;
+  border-radius: 4px;
+}
+
+.result-preview {
+  padding: 10px;
+  max-height: 700px;
+  overflow: auto;
+}
+
+.clear {
+  clear: both;
+}
+
+.title-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.title-full-width {
+  width: 100%;
+}

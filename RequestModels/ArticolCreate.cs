@@ -15,7 +15,7 @@ namespace WikipediaDAW.RequestModels
         public bool Protejat { get; set; }
 
         public DateTime Data_adaugarii { get; set; }
-        
+      
         public ArticolCreate(string domeniu ,string titlu, string continut, string user, bool protejat, DateTime data_adaugarii) {
             Domeniu = domeniu;
             Titlu= titlu;
