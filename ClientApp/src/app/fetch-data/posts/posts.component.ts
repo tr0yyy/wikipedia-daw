@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EditorOption, EditorInstance } from 'angular-markdown-editor'
 import { MarkdownService } from 'ngx-markdown'
@@ -22,7 +22,10 @@ export class PostsComponent implements OnInit {
   markdownTextCopy = '';
   userType = 0;
   isEditing = false;
-  rowsNo = 12;
+
+  isProtected = true;
+  textProtected = "Articol protejat";
+  isLocked = "locked";
 
   articol!: ArticolInterface;
 
@@ -46,6 +49,7 @@ export class PostsComponent implements OnInit {
       autofocus: false,
       iconlibrary: 'fa',
       savable: false,
+      resize:"vertically",
       onShow: (e) => this.bsEditorInstance = e,
       parser: (val) => this.parse(val)
     };
@@ -70,6 +74,12 @@ export class PostsComponent implements OnInit {
     this.markdownText = this.markdownTextCopy; // aici trebuie luat textul din form
     this.isEditing = false;
     this.articol.continut = this.markdownText;
+
+    // Dupa ce este luata valoarea de protectie a articolului, trebuie resetat slide-ul de protect
+    this.isProtected = true;
+    this.textProtected = "Articol protejat";
+    this.isLocked = "locked";
+
     console.log(this.articol);
     this.http.post<ArticolInterface>(
       environment.apiPath + '/articol/update-articol', {
@@ -90,6 +100,11 @@ export class PostsComponent implements OnInit {
   cancelEdit(event: Event) {
     this.markdownTextCopy = '';
     this.isEditing = false;
+
+    // Dupa ce este luata valoarea de protectie a articolului, trebuie resetat slide-ul de protect
+    this.isProtected = true;
+    this.textProtected = "Articol protejat";
+    this.isLocked = "locked";
   }
 
   onFormChanges(): void {
@@ -110,6 +125,24 @@ export class PostsComponent implements OnInit {
     if (this.bsEditorInstance && this.bsEditorInstance.hidePreview) {
       this.bsEditorInstance.hidePreview();
     }
+  }
+
+
+  setTextIsProtected(){
+    if (this.isProtected){
+      this.textProtected = "Articol protejat  ";
+      this.isLocked = "locked";
+    }
+    else {
+      this.textProtected = "Articol neprotejat";
+      this.isLocked = "lock_open";
+    }
+  }
+
+  checkIsProtected(){
+    this.isProtected = !this.isProtected;
+    this.setTextIsProtected();
+    
   }
 
   showFullScreen(isFullScreen: boolean) {
