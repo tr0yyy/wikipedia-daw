@@ -49,6 +49,11 @@ export class AdminPanelComponent {
     this.userAfis = user; // userul selectat
     var roles : string = ""
 
+    if(roless != null)
+      for(let ch of roless)
+        console.log(ch)
+
+
     if(roless != null){
       for(let ch of roless){
         roles = roles.concat(ch)
