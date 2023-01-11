@@ -20,6 +20,8 @@ export class AdminPanelComponent {
   public isModerator : boolean = false;
   public isUtilizator : boolean = false;
 
+  public blockSaveEditIfSameUser : boolean = false;
+
 
 
 
@@ -46,10 +48,15 @@ export class AdminPanelComponent {
   }
 
   afiseazaUtilizator(user: user){
+    this.isUtilizator = this.isModerator = this.isAdmin = false;
     var roless = user.roles // rolurile utilizatorului selectat
     this.afis = true // afisez panoul pentru schimbare de roluri
     this.userAfis = user; // userul selectat
     var roles : string = ""
+    this.blockSaveEditIfSameUser = false
+    if (user.username == this.AuthService.getUser()?.name) {
+      this.blockSaveEditIfSameUser = true
+    }
 
     for (let rol of user.roles) {
       if(rol == RoleEnum.User) {

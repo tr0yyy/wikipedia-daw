@@ -26,7 +26,9 @@ export class CreateArticleComponent implements OnInit {
   userType = 0;
   isEditing = false;
 
-  domeniuSelectat = '';
+  public isLoggedIn = this.authService.isLoggedIn()
+
+  domeniuSelectat = 'Arta';
   
 
   isProtected = false;
@@ -84,6 +86,15 @@ export class CreateArticleComponent implements OnInit {
     this.markdownTextCopy = this.markdownText;
   }
 
+  activateButton = false
+
+  checkTitle(event : any) {
+    if((event.target.value as string).replace(new RegExp(" ", 'g'), '') != "")
+      this.activateButton = true
+    else
+      this.activateButton = false
+  }
+
   saveEdit(event: Event) {
     this.markdownText = this.markdownTextCopy; // aici trebuie luat textul din form
     this.isEditing = false;
@@ -112,15 +123,7 @@ export class CreateArticleComponent implements OnInit {
 });
   }
 
-  cancelEdit(event: Event) {
-    this.markdownTextCopy = '';
-    this.isEditing = false;
-
-    // Dupa ce este luata valoarea de protectie a articolului, trebuie resetat slide-ul de protect
-    this.isProtected = true;
-    this.textProtected = "Articol protejat";
-    this.isLocked = "locked";
-  }
+  
 
   onFormChanges(): void {
     this.templateForm.valueChanges.subscribe(formData => {

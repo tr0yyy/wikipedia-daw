@@ -28,7 +28,7 @@
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="userLoggedIn">
+          <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/create-articol']">Creaza articol</a>
           </li>
           <li *ngIf="!userLoggedIn" class="nav-item" [routerLinkActive]="['link-active']">

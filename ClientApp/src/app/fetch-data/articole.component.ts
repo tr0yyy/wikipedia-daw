@@ -12,6 +12,7 @@ import { Sort } from '@angular/material/sort';
 export class ArticoleComponent {
   public listaArticole: ArticolInterface[] = [];
   public sortedData: ArticolInterface[] = [];
+  public domeniu = this.route.snapshot.paramMap.get('domeniu')
 
   constructor(http: HttpClient, private route: ActivatedRoute, private datepipe: DatePipe) {
     console.log(this.route.snapshot.paramMap.get('domeniu'))

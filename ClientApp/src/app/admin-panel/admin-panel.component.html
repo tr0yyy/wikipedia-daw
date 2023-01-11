@@ -37,7 +37,7 @@
     </div>
 
     <br>
-    <button mat-flat-button color="primary" style="float:left" (click)="saveEdit()" [disabled]="!isAdmin && !isModerator && !isUtilizator">
+    <button mat-flat-button color="primary" style="float:left" (click)="saveEdit()" [disabled]="(!isAdmin && !isModerator && !isUtilizator) || blockSaveEditIfSameUser">
       <mat-icon>save</mat-icon>
       <span> Salveaza modificarile</span>
   </button>

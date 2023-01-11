@@ -1,6 +1,6 @@
 <!-- TODO: Text cu "Acest articol este protejat" sau nimic otherwise -->
 <!-- TODO: pagina de edit articol + buton -->
-<div *ngIf="userType === 0 or userType === 1">
+<h1>{{titlu}}</h1>
 
     <div *ngIf="!isEditing">
     <button mat-flat-button color="primary" style="float:right" (click)="editArticle($event)" [disabled]="!canBeEdited" >
@@ -46,6 +46,5 @@
                 <span> Revenire la versiunea anterioara a continutului</span>
             </button>
         </div>
-    </div>
 
 

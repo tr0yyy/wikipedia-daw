@@ -26,9 +26,10 @@ export class PostsComponent implements OnInit {
   public canChangeProtejat = false;
   public isModerator = false;
   public canBeEdited = false;
+
+  public titlu = ''
   
   markdownTextCopy = '';
-  userType = 0;
   isEditing = false;
 
   isProtected = false;
@@ -49,10 +50,14 @@ export class PostsComponent implements OnInit {
     http.get<ArticolInterface>(environment.apiPath + '/articol/' + this.route.snapshot.paramMap.get('title')).subscribe(async result => {
         
       this.articol = await result;
+      this.titlu = this.articol.titlu
       console.log(this.articol);
       console.log(this.authService.getUser()?.name == this.articol.user)
       this.canChangeProtejat = (this.authService.getRoles()?.includes(RoleEnum.Moderator) 
       || this.authService.getUser()?.name == this.articol.user) ? true : false;
+      if(!this.authService.isLoggedIn()) {
+        this.canChangeProtejat = false;
+      }
       this.isModerator = this.authService.getRoles()?.includes(RoleEnum.Moderator) ? true : false;
       this.markdownText = this.articol.continut
       this.isProtected = this.articol.protejat
