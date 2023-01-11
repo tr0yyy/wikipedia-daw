@@ -46,6 +46,8 @@ namespace WikipediaDAW.Helpers
                     await context.domeniu.AddAsync(new Domeniu() { Name = domain });
             }
 
+            await context.SaveChangesAsync();
+
             var articole = context.articole.Select(x => x.Titlu).ToList();
 
             var geografie = await context.domeniu.FirstAsync(x => x.Name == "Geografie");
