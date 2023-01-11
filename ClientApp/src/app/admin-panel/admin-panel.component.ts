@@ -1,11 +1,13 @@
 ﻿import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../services/authentication.service';
+import { RoleEnum } from '../models/role.enum';
 
 @Component({
   selector: 'app-admin-panel',
-  templateUrl: './admin-panel.component.html'
+  templateUrl: './admin-panel.component.html',
+  styleUrls: ['./admin-panel.component.css']
 })
 export class AdminPanelComponent {
   public utilizatori !: user[];
@@ -44,51 +46,21 @@ export class AdminPanelComponent {
   }
 
   afiseazaUtilizator(user: user){
-    var roless = this.AuthService.getRoles() // rolurile utilizatorului selectat
+    var roless = user.roles // rolurile utilizatorului selectat
     this.afis = true // afisez panoul pentru schimbare de roluri
     this.userAfis = user; // userul selectat
     var roles : string = ""
 
-    if(roless != null)
-      for(let ch of roless)
-        console.log(ch)
-
-
-    if(roless != null){
-      for(let ch of roless){
-        roles = roles.concat(ch)
+    for (let rol of user.roles) {
+      if(rol == RoleEnum.User) {
+        this.isUtilizator = true
+      } else if(rol == RoleEnum.Moderator) {
+        this.isModerator = true
+      } else {
+        this.isAdmin = true
       }
     }
-
-    // actualizez variabilele cu roluri
-    // if(roles != null){
-    //   console.log("=============")
-
-    //   for(let rol of roles){
-        console.log(roles)
-        if(roles == "admin") {
-          this.isAdmin = true
-          console.log("----------")
-
-        } else if (roles == "moderator") {
-          this.isModerator = true
-          console.log("----------")
-
-        } else if ( roles == "utilizator") {
-          this.isUtilizator = true
-          console.log("----------")
-
-        }
-    //   }
-    // }
-    console.log("==============")
-    console.log(this.isAdmin)
-    console.log(this.isModerator)
-    console.log(this.isUtilizator)
-    
-    console.log(user.username)
-    console.log(roles?.length)
-    console.log('Click!')
+        
 
     this.search("") // resetez search boxul de utilizatori
   }
@@ -98,11 +70,35 @@ export class AdminPanelComponent {
   }
   changeModerator(){
     this.isModerator = !this.isModerator
-    console.log(this.isAdmin)
+    console.log(this.isModerator)
   }
   changeUtilizator(){
     this.isUtilizator = !this.isUtilizator
-    console.log(this.isAdmin)
+    console.log(this.isUtilizator)
+  }
+
+  saveEdit() {
+    var exportRoles = []
+    if(this.isAdmin) {
+      exportRoles.push(RoleEnum.Admin as string);
+    }
+    if(this.isModerator) {
+      exportRoles.push(RoleEnum.Moderator as string);
+    }
+    if(this.isUtilizator) {
+      exportRoles.push(RoleEnum.User as string);
+    }
+    this.http.post<string>(environment.apiPath + '/accounts/update-roles', {
+      roles: exportRoles,
+      username: this.userAfis.username
+    }).subscribe({
+      next: (result) => {
+        window.location.reload();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+  });
   }
 
 

@@ -39,8 +39,7 @@ import {MatSelect, MatSelectModule} from '@angular/material/select';
     CounterComponent,
     FetchDataComponent,
     PostsComponent,
-    CreateArticleComponent
-    PostsComponent,
+    CreateArticleComponent,
     AdminPanelComponent
   ],
   schemas: [
@@ -57,8 +56,7 @@ import {MatSelect, MatSelectModule} from '@angular/material/select';
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]},
       { path: 'articol/:title', component: PostsComponent },
-      { path: 'create-articol', component: CreateArticleComponent}
-      { path: 'articol/:title', component: PostsComponent }, 
+      { path: 'create-articol', component: CreateArticleComponent}, 
       { path: 'admin-panel', component: AdminPanelComponent},
     ]) ,
     MarkdownModule.forRoot({

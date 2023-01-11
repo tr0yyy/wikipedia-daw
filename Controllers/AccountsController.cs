@@ -2,6 +2,7 @@
 using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,21 @@ namespace WikipediaDAW.Controllers
             return result;
         }
 
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost("update-roles")]
+        public async Task<IActionResult> updateRoles([FromBody] RolesRequest model)
+        {
+            var user = await _userManager.Users.FirstAsync(u => u.UserName == model.username);
+            if(user != null)
+            {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                await _userManager.AddToRolesAsync(user, model.roles);
+                return Ok(Result.Ok());
+            }
+            return BadRequest(Result.Fail("Cannot update roles!"));
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
 
@@ -83,6 +99,13 @@ namespace WikipediaDAW.Controllers
             this.roles = roles;
             this.username = username;
         }
+    }
+
+    public class RolesRequest
+    {
+        public IList<string> roles { get; set; }
+
+        public string username { get; set; }
     }
 
 }

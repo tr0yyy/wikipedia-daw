@@ -17,17 +17,31 @@
     </ul>
   </div>
 
+  <br>
+
   <!-- TODO: de facut butonul de save si functionalitatea lui -->
-  <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group" *ngIf="afis">
-    <a> {{ userAfis.username }} </a> <br>
-    <input type="checkbox" class="btn-check" id="btncheck1" (click)="changeAdmin()" [checked]="isAdmin">
-    <label class="btn btn-outline-primary" for="btncheck1">Admin</label>
-  
-    <input type="checkbox" class="btn-check" id="btncheck2" (click)="changeModerator()" [checked]="isModerator">
-    <label class="btn btn-outline-primary" for="btncheck2">Moderator</label>
-  
-    <input type="checkbox" class="btn-check" id="btncheck3" (click)="changeUtilizator()" [checked]="isUtilizator">
-    <label class="btn btn-outline-primary" for="btncheck3">Utilizator</label>
+  <div class="" *ngIf="afis">
+    <div class="row">
+    <a> Username selectat: {{ userAfis.username }} </a>
+    </div>
+
+    <div class="">
+      <input type="checkbox" class="btn-check btn-sm" id="btncheck1" (click)="changeAdmin()" [checked]="isAdmin">
+      <label class="btn btn-outline-primary" for="btncheck1">Admin</label>
+    
+      <input type="checkbox" class="btn-check btn-sm" id="btncheck2" (click)="changeModerator()" [checked]="isModerator">
+      <label class="btn btn-outline-primary" for="btncheck2">Moderator</label>
+    
+      <input type="checkbox" class="btn-check btn-sm" id="btncheck3" (click)="changeUtilizator()" [checked]="isUtilizator">
+      <label class="btn btn-outline-primary" for="btncheck3">Utilizator</label>
+    </div>
+
+    <br>
+    <button mat-flat-button color="primary" style="float:left" (click)="saveEdit()" [disabled]="!isAdmin && !isModerator && !isUtilizator">
+      <mat-icon>save</mat-icon>
+      <span> Salveaza modificarile</span>
+  </button>
   </div>
+
 
 </body>
