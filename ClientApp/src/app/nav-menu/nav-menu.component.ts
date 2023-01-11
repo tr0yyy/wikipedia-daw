@@ -57,7 +57,7 @@ export class NavMenuComponent {
     }
   }
   generateLinkFromTitle(title: string) {
-    let link: string = window.location.pathname + "articol/" + title;
+    let link: string = window.location.origin + "/articol/" + title;
     return link;
   }
 
