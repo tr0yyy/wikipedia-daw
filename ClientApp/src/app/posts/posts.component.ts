@@ -53,6 +53,9 @@ export class PostsComponent implements OnInit {
       console.log(this.authService.getUser()?.name == this.articol.user)
       this.canChangeProtejat = (this.authService.getRoles()?.includes(RoleEnum.Moderator) 
       || this.authService.getUser()?.name == this.articol.user) ? true : false;
+      if(!this.authService.isLoggedIn()) {
+        this.canChangeProtejat = false;
+      }
       this.isModerator = this.authService.getRoles()?.includes(RoleEnum.Moderator) ? true : false;
       this.markdownText = this.articol.continut
       this.isProtected = this.articol.protejat

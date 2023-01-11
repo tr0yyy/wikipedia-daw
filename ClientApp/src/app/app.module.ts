@@ -57,7 +57,7 @@ import {MatSelect, MatSelectModule} from '@angular/material/select';
       { path: 'register', component: RegisterComponent },
       { path: 'articole/:domeniu', component: ArticoleComponent },
       { path: 'articol/:title', component: PostsComponent },
-      { path: 'create-articol', component: CreateArticleComponent, canActivate: [AuthGuard]}, 
+      { path: 'create-articol', component: CreateArticleComponent}, 
       { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AuthGuard]},
     ]) ,
     MarkdownModule.forRoot({

@@ -85,8 +85,6 @@ namespace WikipediaDAW.Controllers
         public async Task<Result<string>> CreateArticol([FromBody] ArticolCreate model)
         {
             DbSet<Articol> articols = _utilizatorContext.articole;
-            var user = await _utilizatorContext.Users.Where(user => user.UserName == model.User)
-                .FirstAsync();
 
             var domeniu = await _utilizatorContext.domeniu.Where(d => d.Name == model.Domeniu)
                 .FirstAsync();
@@ -95,11 +93,16 @@ namespace WikipediaDAW.Controllers
             {
                 Domeniu = domeniu,
                 Titlu = model.Titlu,
-                Autor = (User)user,
                 Data_adaugarii = DateTime.UtcNow,
                 Continut = model.Continut,
                 Protejat = model.Protejat
             };
+
+            if (model.User != null)
+            {
+                articol.Autor = (User)await _utilizatorContext.Users.Where(user => user.UserName == model.User)
+                    .FirstAsync();
+            }
 
             var result = await articols.AddAsync(articol);
 

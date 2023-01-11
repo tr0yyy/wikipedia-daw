@@ -26,6 +26,8 @@ export class CreateArticleComponent implements OnInit {
   userType = 0;
   isEditing = false;
 
+  public isLoggedIn = this.authService.isLoggedIn()
+
   domeniuSelectat = '';
   
 

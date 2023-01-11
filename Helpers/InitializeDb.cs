@@ -39,7 +39,7 @@ namespace WikipediaDAW.Helpers
                 await userManager.AddToRoleAsync((User)admin, Roles.Admin);
             }
 
-            foreach(var domain in DomainsEnum.RolesEnumValues)
+            foreach (var domain in DomainsEnum.RolesEnumValues)
             {
                 var domainDb = await context.domeniu.FirstOrDefaultAsync(domeniu => domeniu.Name == domain);
                 if(domainDb == null)
