@@ -1,0 +1,47 @@
+<body>
+
+  <div class="input-group w-auto position-relative">
+    <input #input type="search"
+           class="form-control"
+           placeholder="Cauta utilizator dupa username"
+           aria-label="Search" />
+    <button class="btn btn-outline-primary" type="button" (click)="search(input.value)">
+      Search
+    </button>
+  </div>
+  <div class="position-absolute">
+    <ul class="list-unstyled" *ngFor="let user of utilizatoriFiltrati">
+      <li>
+        <a class="list-group-item btn btn-primary" (click)="afiseazaUtilizator(user)"> {{user.username}} </a>
+      </li>
+    </ul>
+  </div>
+
+  <br>
+
+  <!-- TODO: de facut butonul de save si functionalitatea lui -->
+  <div class="" *ngIf="afis">
+    <div class="row">
+    <a> Username selectat: {{ userAfis.username }} </a>
+    </div>
+
+    <div class="">
+      <input type="checkbox" class="btn-check btn-sm" id="btncheck1" (click)="changeAdmin()" [checked]="isAdmin">
+      <label class="btn btn-outline-primary" for="btncheck1">Admin</label>
+    
+      <input type="checkbox" class="btn-check btn-sm" id="btncheck2" (click)="changeModerator()" [checked]="isModerator">
+      <label class="btn btn-outline-primary" for="btncheck2">Moderator</label>
+    
+      <input type="checkbox" class="btn-check btn-sm" id="btncheck3" (click)="changeUtilizator()" [checked]="isUtilizator">
+      <label class="btn btn-outline-primary" for="btncheck3">Utilizator</label>
+    </div>
+
+    <br>
+    <button mat-flat-button color="primary" style="float:left" (click)="saveEdit()" [disabled]="!isAdmin && !isModerator && !isUtilizator">
+      <mat-icon>save</mat-icon>
+      <span> Salveaza modificarile</span>
+  </button>
+  </div>
+
+
+</body>

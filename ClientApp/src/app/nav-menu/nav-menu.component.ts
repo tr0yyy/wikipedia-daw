@@ -3,6 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { RoleEnum } from '../models/role.enum';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -58,6 +59,18 @@ export class NavMenuComponent {
   generateLinkFromTitle(title: string) {
     let link: string = window.location.pathname + "articol/" + title;
     return link;
+  }
+
+
+  public isAdmin: boolean = this.checkIfAdmin()
+
+  checkIfAdmin(): boolean {
+    let value = this.authenticationService.getRoles()?.includes(RoleEnum.Admin)
+    if (value === true) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

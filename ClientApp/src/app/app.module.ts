@@ -27,6 +27,9 @@ import { PostsComponent } from './fetch-data/posts/posts.component';
 import { MatSlideToggleModule} from '@angular/material/slide-toggle'
 import { LoadingInterceptor } from './helpers/loading.interceptor';
 import { CreateArticleComponent } from './create-article/create-article.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import {MatSelect, MatSelectModule} from '@angular/material/select';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +39,8 @@ import { CreateArticleComponent } from './create-article/create-article.componen
     CounterComponent,
     FetchDataComponent,
     PostsComponent,
-    CreateArticleComponent
+    CreateArticleComponent,
+    AdminPanelComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
@@ -52,7 +56,8 @@ import { CreateArticleComponent } from './create-article/create-article.componen
       { path: 'register', component: RegisterComponent },
       { path: 'articol', component: FetchDataComponent, canActivate: [AuthGuard]},
       { path: 'articol/:title', component: PostsComponent },
-      { path: 'create-articol', component: CreateArticleComponent}
+      { path: 'create-articol', component: CreateArticleComponent}, 
+      { path: 'admin-panel', component: AdminPanelComponent},
     ]) ,
     MarkdownModule.forRoot({
       loader: HttpClient, // optional, only if you use [src] attribute
@@ -76,9 +81,10 @@ import { CreateArticleComponent } from './create-article/create-article.componen
     MatSlideToggleModule,
     MatCardModule,
     MatInputModule,
+    MatSelectModule,
     AngularMarkdownEditorModule.forRoot({
       iconlibrary: 'fa'
-    })
+    }),
   ],
   providers: [DatePipe,
   { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
