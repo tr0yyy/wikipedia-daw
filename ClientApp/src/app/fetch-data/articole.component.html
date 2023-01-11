@@ -1,0 +1,22 @@
+<h1 id="tableLabel">Lista articole</h1>
+
+<p>Lista completa de articole</p>
+
+<p *ngIf="!listaArticole"><em>Loading...</em></p>
+
+<table matSort (matSortChange)="sortData($event)" class='table table-striped' aria-labelledby="tableLabel" *ngIf="listaArticole">
+  <thead>
+    <tr>
+      <th mat-sort-header="name">Nume</th>
+      <th mat-sort-header="user">Autor</th>
+      <th mat-sort-header="date">Data Adaugarii</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let articol of sortedData">
+      <td><a href="{{generateLinkFromTitle(articol.titlu)}}">{{ articol.titlu }}</a></td>
+      <td>{{ articol.user }}</td>
+      <td>{{ articol.data_adaugarii }}</td>
+    </tr>
+  </tbody>
+</table>

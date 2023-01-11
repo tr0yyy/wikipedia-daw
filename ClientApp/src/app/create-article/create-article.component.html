@@ -6,10 +6,13 @@
           <mat-label>Titlu</mat-label>
           <input matInput name="titlu" formControlName="titlu" placeholder="Titlul articolului">
         </mat-form-field>
-        <mat-form-field class="title-full-width">
+        <mat-form-field>
             <mat-label>Domeniu</mat-label>
-            <input matInput name="domeniu" formControlName="domeniu" placeholder="Domeniul articolului">
-          </mat-form-field>
+        <mat-select [(value)]="domeniuSelectat" class="title-full-width">
+            <mat-option *ngFor = "let domeniu of domenii" value="{{domeniu}}">{{domeniu}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </form>
     <form [formGroup]="templateForm" novalidate >
         <div class="editor">
