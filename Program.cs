@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication;
 using WikipediaDAW.Services;
+using WikipediaDAW.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -65,27 +66,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-async Task CreateRoles(IServiceProvider serviceProvider)
-{
-    //initializing custom roles 
-    var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
-    string[] roleNames = { Roles.User, Roles.Moderator, Roles.Admin };
-    IdentityResult roleResult;
-
-    foreach (var roleName in roleNames)
-    {
-        var roleExist = await RoleManager.RoleExistsAsync(roleName);
-        if (!roleExist)
-        {
-            //create the roles and seed them to the database: Question 1
-            roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
-        }
-    }
-}
-
-await CreateRoles(builder.Services.BuildServiceProvider());
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -109,5 +89,11 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html"); ;
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await InitializeDb.Run(services);
+}
 
 app.Run();

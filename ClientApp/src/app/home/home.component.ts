@@ -9,14 +9,15 @@ import { RoleEnum } from '../models/role.enum';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   articole: ArticolInterface[] = [];
+  domenii: string[] = []
   public articoleFiltrate: ArticolInterface[] = [];
 
   constructor(http: HttpClient, private datepipe: DatePipe, private authenticationService: AuthenticationService) {
     console.log(environment.apiPath + '/articol')
-    if(this.accessToTable) {
       http.get<ArticolInterface[]>(environment.apiPath + '/articol/first50').subscribe(async result => {
         
         this.articole = await result;
@@ -26,7 +27,11 @@ export class HomeComponent {
         }
         this.articoleFiltrate = this.articole;
       }, error => console.error(error));
-    }
+      http.get<string[]>(environment.apiPath + '/articol/alldomains').subscribe(async result => {
+        
+        this.domenii = await result;
+        console.log(this.domenii);
+      }, error => console.error(error));
   }
 
   filterValues(value: any) {
@@ -54,6 +59,11 @@ export class HomeComponent {
       return false;
     }
   }
+
+  generateLinkFromDomain(domain: string) {
+    return window.location.href + "articole/" + domain
+  }
+  
 }
 
 

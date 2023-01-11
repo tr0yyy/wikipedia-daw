@@ -3,7 +3,7 @@
 <div *ngIf="userType === 0 or userType === 1">
 
     <div *ngIf="!isEditing">
-    <button mat-flat-button color="primary" style="float:right" (click)="editArticle($event)">
+    <button mat-flat-button color="primary" style="float:right" (click)="editArticle($event)" [disabled]="!canBeEdited" >
         <mat-icon>edit</mat-icon>
         <span> Editeaza articolul</span>
     </button>
@@ -23,7 +23,7 @@
             </button>
             <div style="padding-left:210px">
                 <mat-icon color="primary">{{isLocked}}</mat-icon>
-                <mat-slide-toggle color="primary" (change)="checkIsProtected($event)" [(ngModel)]="isProtected">{{textProtected}}</mat-slide-toggle>
+                <mat-slide-toggle color="primary" (change)="checkIsProtected($event)" [(ngModel)]="isProtected" [disabled]="!canChangeProtejat">{{textProtected}}</mat-slide-toggle>
             </div>
 
         <div class="clear"></div>
@@ -41,7 +41,7 @@
 
         <br>
         <div>
-            <button mat-flat-button color="warn" style="float:left" (click)="revertEdit($event)">
+            <button [disabled]="!isModerator" mat-flat-button color="warn" style="float:left" (click)="revertEdit($event)">
                 <mat-icon>undo</mat-icon>
                 <span> Revenire la versiunea anterioara a continutului</span>
             </button>

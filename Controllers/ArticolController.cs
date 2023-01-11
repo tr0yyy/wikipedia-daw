@@ -1,9 +1,13 @@
 ﻿using FluentResults;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using WikipediaDAW.ContextModels;
 using WikipediaDAW.Models;
 using WikipediaDAW.RequestModels;
@@ -31,7 +35,7 @@ namespace WikipediaDAW.Controllers
         {
             DbSet<Articol> articols = _utilizatorContext.articole;
             IEnumerable<ArticolCreate> first50 = articols.OrderByDescending(u => u.Data_adaugarii)
-                .Select(x => new ArticolCreate(x.Domeniu, x.Titlu, x.Continut, x.Autor.UserName, x.Protejat, x.Data_adaugarii))
+                .Select(x => new ArticolCreate(x.Domeniu.Name, x.Titlu, x.Continut, x.Autor.UserName, x.Protejat, x.Data_adaugarii))
                 .Take(50);
             return first50;
         }
@@ -40,17 +44,16 @@ namespace WikipediaDAW.Controllers
         public IQueryable<ArticolCreate> GetAll()
         {
             DbSet<Articol> articols = _utilizatorContext.articole;
-            return articols.Select(x => new ArticolCreate(x.Domeniu, x.Titlu, x.Continut, x.Autor.UserName, x.Protejat, x.Data_adaugarii));
+            return articols.Select(x => new ArticolCreate(x.Domeniu.Name, x.Titlu, x.Continut, x.Autor.UserName, x.Protejat, x.Data_adaugarii));
         }
 
         [HttpGet("{title}")]
         public async Task<ArticolCreate> GetArticol(string title)
         {
-            Console.WriteLine("testget");
             DbSet<Articol> articols = _utilizatorContext.articole;
             title = title.ToLower();
             var result = await articols.Where(articol => articol.Titlu == title)
-                .Select(x => new ArticolCreate(x.Domeniu, x.Titlu, x.Continut, x.Autor.UserName, x.Protejat, x.Data_adaugarii))
+                .Select(x => new ArticolCreate(x.Domeniu.Name, x.Titlu, x.Continut, x.Autor.UserName, x.Protejat, x.Data_adaugarii))
                 .FirstAsync();
             return result;
         }
@@ -66,7 +69,15 @@ namespace WikipediaDAW.Controllers
         [HttpGet("alldomains")]
         public IEnumerable<String> GetDomains()
         {
-            return _utilizatorContext.articole.Select(x => x.Domeniu).Distinct().ToList();
+            return _utilizatorContext.domeniu.Select(x => x.Name).Distinct().ToList();
+        }
+
+        [HttpGet("articole-domeniu/{domeniu}")]
+        public IEnumerable<ArticolCreate> GetArticlesByDomain(string domeniu) 
+        {
+            return _utilizatorContext.articole.Where(articol => articol.Domeniu.Name.ToLower() == domeniu)
+                .Select(x => new ArticolCreate(x.Domeniu.Name, x.Titlu, x.Continut, x.Autor.UserName, x.Protejat, x.Data_adaugarii))
+                .ToList();
         }
 
 
@@ -77,9 +88,12 @@ namespace WikipediaDAW.Controllers
             var user = await _utilizatorContext.Users.Where(user => user.UserName == model.User)
                 .FirstAsync();
 
+            var domeniu = await _utilizatorContext.domeniu.Where(d => d.Name == model.Domeniu)
+                .FirstAsync();
+
             Articol articol = new()
             {
-                Domeniu = model.Domeniu,
+                Domeniu = domeniu,
                 Titlu = model.Titlu,
                 Autor = (User)user,
                 Data_adaugarii = DateTime.UtcNow,
@@ -103,12 +117,11 @@ namespace WikipediaDAW.Controllers
         [HttpPost("update-articol")]
         public async Task<Result<string>> UpdateArticol([FromBody] ArticolCreate model)
         {
-
             DbSet<Articol> articols = _utilizatorContext.articole;
             var articol = await articols.Where(art => art.Titlu == model.Titlu).FirstAsync();
             if (articol != null)
             {
-                if(articol.Continut != model.Continut)
+                if (articol.Continut != model.Continut)
                 {
                     _utilizatorContext.istoric_articol.Add(new Istoric_Articol()
                     {
@@ -118,14 +131,27 @@ namespace WikipediaDAW.Controllers
                     });
                 }
                 articol.Continut = model.Continut;
-                articol.Protejat = model.Protejat;
+                if (!StringValues.IsNullOrEmpty(Request.Headers.Authorization))
+                {
+                    var username = AuthService.getUserFromJwt(Request.Headers.Authorization);
+                    var user = await _utilizatorContext.Users.FirstAsync(u => u.UserName == username);
+                    var roles = await _userManager.GetRolesAsync((User)user);
+                    if (articol.Autor == user || roles.Contains(Roles.Moderator))
+                    {
+                        articol.Protejat = model.Protejat;
+                    }
+                }
                 articols.Update(articol);
                 await _utilizatorContext.SaveChangesAsync();
                 return Result.Ok("Succesfully updated!");
             }
             return Result.Fail("Error!");
+ 
+
+
         }
 
+        [Authorize(Roles = Roles.Moderator)]
         [HttpPost("revert-articol")]
         public async Task<Result<string>> RevertArticol([FromBody] ArticolCreate model)
         {
@@ -134,7 +160,7 @@ namespace WikipediaDAW.Controllers
             var roles = await _userManager.GetRolesAsync((User)user);
             DbSet<Articol> articols = _utilizatorContext.articole;
             var articol = await articols.Where(art => art.Titlu == model.Titlu).FirstAsync();
-            if (articol != null && (articol.Autor == user || roles.Contains(Roles.Moderator) || roles.Contains(Roles.Admin)))
+            if (articol != null)
             {
                 var articol_vechi = await _utilizatorContext.istoric_articol.OrderByDescending(u => u.data_editarii).FirstAsync();
                 articol.Continut = articol_vechi.continut_vechi;

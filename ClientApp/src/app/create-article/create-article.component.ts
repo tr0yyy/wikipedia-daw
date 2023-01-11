@@ -26,9 +26,14 @@ export class CreateArticleComponent implements OnInit {
   userType = 0;
   isEditing = false;
 
+  domeniuSelectat = '';
+  
+
   isProtected = false;
   textProtected = "";
   isLocked = "";
+
+  domenii: string[] = []
 
 
 
@@ -43,6 +48,10 @@ export class CreateArticleComponent implements OnInit {
   ) 
   { 
     this.setTextIsProtected()
+    this.http.get<string[]>(environment.apiPath + '/articol/alldomains').subscribe(async result => {
+        this.domenii = result
+    })
+    
   }
 
   ngOnInit() {
@@ -81,7 +90,7 @@ export class CreateArticleComponent implements OnInit {
     this.articol.continut = this.markdownText;
     this.articol.protejat = this.isProtected;
     this.articol.titlu = this.titleDomain.get('titlu')?.value;
-    this.articol.domeniu = this.titleDomain.get('domeniu')?.value
+    this.articol.domeniu = this.domeniuSelectat
 
     console.log(this.articol);
     this.http.post<ArticolInterface>(
